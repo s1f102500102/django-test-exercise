@@ -98,7 +98,7 @@ class TodoViewTestCase(TestCase):
         self.assertEqual(response.context['tasks'][1], task2)
     
     def test_detail_get_success(self):
-    task = Task(
+        task = Task(
         title='task1',
         due=timezone.make_aware(datetime(2024, 7, 1)))
         task.save()
