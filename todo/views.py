@@ -11,12 +11,14 @@ def index(request):
         )
         task.save()
     
-    if request.GET.get("order") == "due":
+    order = request.GET.get("order")
+    
+    if order == "due":
         tasks = Task.objects.order_by("due_at")
+    elif order == "post":
+        tasks = Task.objects.order_by("-id") 
     else:
-        tasks = Task.objects.order_by("-posted_at")
-
-    tasks = Task.objects.all()
+        tasks = Task.objects.order_by("id")
 
     context = {
         'tasks': tasks
