@@ -6,48 +6,66 @@
     <title>To Do Application</title>
     <meta charset="UTF-8">
     <meta name="author" content="INIAD">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
   </head>
 
   <body>
-    <h1>Sample To Do Application</h1>
-    <p>You can submit tasks from the following form.</p>
-    <form action="{% url 'index' %}" method="post">
-      {% csrf_token %}
-      <div>
-        <label for="titleInput">Title</label><br>
-        <input id="titleInput" name="title" type="text" placeholder="Input title">
+    <div class="page">
+      <div class="page-header">
+        <span class="eyebrow">To Do</span>
+        <h1>Sample To Do Application</h1>
+        <p>You can submit tasks from the following form.</p>
       </div>
-      <div>
-        <label for="dueInput">Due at:</label><br>
-        <input id="dueInput" name="due_at" type="datetime-local">
-      </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
-    <br>
 
-    <div>
-      <a href="{% url 'index' %}?order=due">Sort by Due Date</a> |
-      <a href="{% url 'index' %}?order=post">Sort by Posted Date</a>
-    </div>
+      <div class="card">
+        <form action="{% url 'index' %}" method="post">
+          {% csrf_token %}
+          <div class="field">
+            <label for="titleInput">Title</label>
+            <input id="titleInput" name="title" type="text" placeholder="Input title">
+          </div>
+          <div class="field">
+            <label for="dueInput">Due at:</label>
+            <input id="dueInput" name="due_at" type="datetime-local">
+          </div>
+          <div>
+            <button type="submit" class="btn">Submit</button>
+          </div>
+        </form>
+      </div>
 
-    {% for task in tasks %}
-    <div class="text">
-      <h2><a href = "{%url 'detail' task.id %}">{{ task.title }}</a></h2>
-      <ul>
-        <li>Posted at: {{ task.posted_at }}</li>
-        {% if task.due_at %} 
-        <li>Due at: {{ task.due_at }}</li>
-        {% endif %}
-        {% if task.completed %} 
-        <li>Status: Completed</li>
-        {% else %}
-        <li>Status: Not Completed</li>
-        {% endif %}
+      <div class="sort-bar">
+        <a href="{% url 'index' %}?order=due">Sort by Due Date</a>
+        <a href="{% url 'index' %}?order=post">Sort by Posted Date</a>
+      </div>
+
+      {% if tasks %}
+      <ul class="task-list">
+        {% for task in tasks %}
+        <li>
+          <a class="task-card" href="{% url 'detail' task.id %}">
+            <h2>{{ task.title }}</h2>
+            <div class="task-meta">
+              <span>Posted at: {{ task.posted_at }}</span>
+              {% if task.due_at %}
+              <span>&middot;</span>
+              <span>Due at: {{ task.due_at }}</span>
+              {% endif %}
+              {% if task.completed %}
+              <span class="badge badge-completed">Completed</span>
+              {% else %}
+              <span class="badge badge-pending">Not Completed</span>
+              {% endif %}
+            </div>
+          </a>
+        </li>
+        {% endfor %}
       </ul>
+      {% else %}
+      <p class="empty-state">No tasks yet. Add your first one above.</p>
+      {% endif %}
     </div>
-    {% endfor %}
   </body>
 
 </html>
