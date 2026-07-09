@@ -6,26 +6,35 @@
     <title>To Do Application</title>
     <meta charset="UTF-8">
     <meta name="author" content="INIAD">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
   </head>
 
   <body>
-    <h1>Edit task</h1>
-    <p>You can edit tasks from the following form.</p>
-    <form action="{% url 'update' task.id%}" method="post">
-      {% csrf_token %}
-      <div>
-        <label for="titleInput">Title</label><br>
-        <input id="titleInput" name="title" type="text" placeholder="Input title" value="{{ task.title }}">
+    <div class="page">
+      <div class="page-header">
+        <span class="eyebrow">To Do</span>
+        <h1>Edit task</h1>
+        <p>You can edit tasks from the following form.</p>
       </div>
-      <div>
-        <label for="dueInput">Due at:</label><br>
-        <input id="dueInput" name="due_at" type="datetime-local" value="{{ task.due_at |date:"Y-m-d H:i" }}">
+
+      <div class="card">
+        <form action="{% url 'update' task.id%}" method="post">
+          {% csrf_token %}
+          <div class="field">
+            <label for="titleInput">Title</label>
+            <input id="titleInput" name="title" type="text" placeholder="Input title" value="{{ task.title }}">
+          </div>
+          <div class="field">
+            <label for="dueInput">Due at:</label>
+            <input id="dueInput" name="due_at" type="datetime-local" value="{{ task.due_at |date:"Y-m-d H:i" }}">
+          </div>
+          <div>
+            <button type="submit" class="btn">Submit</button>
+          </div>
+        </form>
       </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
-    <br>
+    </div>
   </body>
 
 </html>
