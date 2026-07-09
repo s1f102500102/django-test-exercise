@@ -6,26 +6,34 @@
   <title>To Do Application</title>
   <meta charset="UTF-8">
   <meta name="author" content="INIAD">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'todo/style.css' %}">
 </head>
 
 <body>
-  <h1>{{ task.title }}</h1>
-  <ul>
-    <li>Posted at: {{ task.posted_at }}</li>
-    {% if task.due_at %}
-    <li>Due at: {{ task.due_at }}</li>
-    {% endif %}
-    {% if task.completed %}
-    <li>Status: Completed</li>
-    {% else %}
-    <li>Status: Not Completed</li>
-    {% endif %}
-  </ul>
+  <div class="page">
+    <div class="card">
+      <h1 class="detail-title">{{ task.title }}</h1>
+      <ul class="detail-meta">
+        <li><strong>Posted at:</strong> {{ task.posted_at }}</li>
+        {% if task.due_at %}
+        <li><strong>Due at:</strong> {{ task.due_at }}</li>
+        {% endif %}
+        <li>
+          {% if task.completed %}
+          <span class="badge badge-completed">Completed</span>
+          {% else %}
+          <span class="badge badge-pending">Not Completed</span>
+          {% endif %}
+        </li>
+      </ul>
 
-  <div>
-    <a href="{% url 'index' %}">Top</a>
-    <a href="{% url 'update' task.id %}">Edit</a>
-    <a href="{%url 'delete' task.id %}">Delete</a>
+      <div class="actions">
+        <a href="{% url 'index' %}" class="btn btn-secondary">Top</a>
+        <a href="{% url 'update' task.id %}" class="btn btn-secondary">Edit</a>
+        <a href="{%url 'delete' task.id %}" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
   </div>
 </body>
 
