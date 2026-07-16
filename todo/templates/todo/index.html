@@ -18,6 +18,31 @@
         <p>You can submit tasks from the following form.</p>
       </div>
 
+      <div class="dashboard">
+        <div class="stat-tile">
+          <span class="stat-value">{{ total_count }}</span>
+          <span class="stat-label">Total tasks</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-value">{{ completed_count }}</span>
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-tile{% if overdue_count %} stat-tile-alert{% endif %}">
+          <span class="stat-value">{{ overdue_count }}</span>
+          <span class="stat-label">Overdue</span>
+        </div>
+      </div>
+
+      <div class="meter-card">
+        <div class="meter-header">
+          <span>Completion rate</span>
+          <span class="meter-value">{{ completion_rate }}%</span>
+        </div>
+        <div class="meter-track">
+          <div class="meter-fill" style="width: {{ completion_rate }}%;"></div>
+        </div>
+      </div>
+
       <div class="card">
         <form action="{% url 'index' %}" method="post">
           {% csrf_token %}
