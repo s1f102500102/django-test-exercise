@@ -174,3 +174,55 @@ class TodoViewTestCase(TestCase):
         response = client.post('/1/update', data)
 
         self.assertEqual(response.status_code, 404)
+
+    def test_toggle_marks_complete(self):
+        task = Task(title='task1', due_at=timezone.make_aware(datetime(2024, 7, 1)))
+        task.save()
+
+        client = Client()
+        response = client.get('/{}/toggle'.format(task.pk))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/{}/'.format(task.pk))
+        self.assertTrue(Task.objects.get(pk=task.pk).completed)
+
+    def test_toggle_marks_incomplete(self):
+        task = Task(title='task1', completed=True)
+        task.save()
+
+        client = Client()
+        response = client.get('/{}/toggle'.format(task.pk))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Task.objects.get(pk=task.pk).completed)
+
+    def test_toggle_fail(self):
+        client = Client()
+        response = client.get('/1/toggle')
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_index_dashboard_stats(self):
+        past = timezone.make_aware(datetime(2020, 1, 1))
+        future = timezone.now() + timezone.timedelta(days=1)
+        Task(title='overdue', due_at=past).save()
+        Task(title='completed', due_at=future, completed=True).save()
+        Task(title='pending', due_at=future).save()
+
+        client = Client()
+        response = client.get('/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['total_count'], 3)
+        self.assertEqual(response.context['completed_count'], 1)
+        self.assertEqual(response.context['overdue_count'], 1)
+        self.assertEqual(response.context['completion_rate'], 33)
+
+    def test_index_dashboard_stats_empty(self):
+        client = Client()
+        response = client.get('/')
+
+        self.assertEqual(response.context['total_count'], 0)
+        self.assertEqual(response.context['completed_count'], 0)
+        self.assertEqual(response.context['overdue_count'], 0)
+        self.assertEqual(response.context['completion_rate'], 0)

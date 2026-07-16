@@ -30,6 +30,9 @@
 
       <div class="actions">
         <a href="{% url 'index' %}" class="btn btn-secondary">Top</a>
+        <a href="{% url 'toggle' task.id %}" class="btn">
+          {% if task.completed %}Mark incomplete{% else %}Mark complete{% endif %}
+        </a>
         <a href="{% url 'update' task.id %}" class="btn btn-secondary">Edit</a>
         <a href="{%url 'delete' task.id %}" class="btn btn-danger">Delete</a>
       </div>
