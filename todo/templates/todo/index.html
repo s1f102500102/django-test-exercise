@@ -39,7 +39,7 @@
           <span class="meter-value">{{ completion_rate }}%</span>
         </div>
         <div class="meter-track">
-          <div class="meter-fill" style="width: {{ completion_rate }}%;"></div>
+          <div class="meter-fill" id="meter-fill"></div>
         </div>
       </div>
 
@@ -91,6 +91,9 @@
       <p class="empty-state">No tasks yet. Add your first one above.</p>
       {% endif %}
     </div>
+    <script>
+      document.getElementById('meter-fill').style.width = '{{ completion_rate }}%';
+    </script>
   </body>
 
 </html>
